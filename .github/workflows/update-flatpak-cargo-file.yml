@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: 2024 The Gamebox Developers
+#
+# SPDX-License-Identifier: Apache-2.0
+
+---
+name: Update Flatpak Cargo data
+
+on:
+  push:
+    branches: [main]
+    paths: ["Cargo.lock"]
+
+jobs:
+  update-flatpak-cargo-data:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          git config --global user.email "1334592+shymega@users.noreply.github.com"
+          git config --global user.name "shymega"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - run: pip install --user toml aiohttp
+      - run: |
+          ./script/flatpak-cargo-generator.py -o ./build-aux/generated-sources.json ./Cargo.lock
+          git add -f ./build-aux/generated-sources.json
+          git commit -m "chore(flatpak): Update generated-sources.json for Flatpak usage"
+          git push

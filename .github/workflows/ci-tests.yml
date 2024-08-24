@@ -1,0 +1,20 @@
+# SPDX-FileCopyrightText: 2024 The Gamebox Developers
+#
+# SPDX-License-Identifier: Apache-2.0
+
+---
+name: CI Tests
+
+on:
+  push:
+    paths: ["src/**", "Cargo.toml", "Cargo.lock", "rust-toolchain", "*.nix"]
+  workflow_dispatch:
+
+jobs:
+  test-linux:
+    uses: ./.github/workflows/ci-tests-linux.yml
+    secrets: inherit
+
+  test-nix-pm:
+    uses: ./.github/workflows/ci-nix-pm-tests.yml
+    secrets: inherit
